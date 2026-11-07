@@ -1,0 +1,39 @@
+{
+  "$comment": "Tools installable with https://get.otfabric.io/<tool>. Edit here, then run `make registry`.",
+  "version": 1,
+  "tools": {
+    "bacnetctl": { "repo": "otfabric/bacnetctl", "kind": "cli", "protocol": "BACnet", "summary": "BACnet/IP discovery, property read/write, COV, alarms, BBMD and a simulated device." },
+    "canbusctl": { "repo": "otfabric/canbusctl", "kind": "cli", "protocol": "CAN", "summary": "CAN FD/XL, SocketCAN, ISO-TP and DBC: monitor, decode, capture, replay and simulate." },
+    "canopenctl": { "repo": "otfabric/canopenctl", "kind": "cli", "protocol": "CANopen", "summary": "CANopen (CiA 301/402) discovery, SDO/PDO, NMT, EMCY, EDS and device simulation." },
+    "dnp3ctl": { "repo": "otfabric/dnp3ctl", "kind": "cli", "protocol": "DNP3", "summary": "DNP3 (IEEE 1815) polling, control, discovery, file transfer and a simulated outstation." },
+    "ethernetipctl": { "repo": "otfabric/ethernetipctl", "kind": "cli", "protocol": "EtherNet/IP", "summary": "EtherNet/IP (CIP) discovery, attributes, cyclic I/O, Logix tags, EDS and adapter simulation." },
+    "iec104ctl": { "repo": "otfabric/iec104ctl", "kind": "cli", "protocol": "IEC 60870-5-104", "summary": "IEC 104 SCADA and RTU testing, monitoring, commands and diagnostics." },
+    "iec61850ctl": { "repo": "otfabric/iec61850ctl", "kind": "cli", "protocol": "IEC 61850", "summary": "IEC 61850 MMS, GOOSE and Sampled Values: discover IEDs, browse, control, reports and SCL." },
+    "ieee20305ctl": { "repo": "otfabric/ieee20305ctl", "kind": "cli", "protocol": "IEEE 2030.5", "summary": "IEEE 2030.5 (SEP 2.0) DER testing: discovery, registration, certificates and validation." },
+    "knxctl": { "repo": "otfabric/knxctl", "kind": "cli", "protocol": "KNX", "summary": "KNXnet/IP discovery, tunnelling, routing, group monitoring, DPT coding and simulation." },
+    "mbcapctl": { "repo": "otfabric/go-modbus-capture", "kind": "embedded", "protocol": "Modbus", "summary": "Inspect, convert and validate Modbus capture files (.mbcap)." },
+    "mbtracectl": { "repo": "otfabric/go-modbus-trace", "kind": "embedded", "protocol": "Modbus", "summary": "Analyse Modbus/TCP traffic in pcap/pcapng traces and export MBCAP." },
+    "modbus-cli": { "repo": "otfabric/go-modbus", "kind": "embedded", "protocol": "Modbus", "summary": "Minimal Modbus TCP/RTU client for quick probing and troubleshooting." },
+    "modbusctl": { "repo": "otfabric/modbusctl", "kind": "cli", "protocol": "Modbus", "summary": "Modbus TCP discovery, register scanning, fingerprinting, SunSpec, recording, replay and simulation." },
+    "nsdctl": { "repo": "otfabric/go-iec61850-model", "kind": "embedded", "protocol": "IEC 61850", "summary": "Inspect and validate IEC 61850 namespace definitions (NSD, IEC 61850-7-7)." },
+    "ocppctl": { "repo": "otfabric/ocppctl", "kind": "cli", "protocol": "OCPP", "summary": "OCPP 1.6J/2.0.1/2.1: test CSMS connections, simulate chargers and serve a test CSMS." },
+    "opcuactl": { "repo": "otfabric/opcuactl", "kind": "cli", "protocol": "OPC UA", "summary": "OPC UA discovery, browse, read/write, subscriptions, events, history and diagnostics." },
+    "openadrctl": { "repo": "otfabric/openadrctl", "kind": "cli", "protocol": "OpenADR", "summary": "OpenADR 3.x VEN and business-logic clients, a test VTN, events and reports." },
+    "otprobe": { "repo": "otfabric/go-otfp", "kind": "embedded", "protocol": "multi-protocol", "summary": "Identify which industrial protocol an endpoint speaks." },
+    "profinetctl": { "repo": "otfabric/profinetctl", "kind": "cli", "protocol": "PROFINET", "summary": "PROFINET IO discovery, DCP configuration, LLDP topology, GSDML, I&M and RT I/O monitoring." },
+    "s7commctl": { "repo": "otfabric/s7commctl", "kind": "cli", "protocol": "S7comm", "summary": "Siemens S7comm PLC discovery, identification, memory read/write, blocks and diagnostics." },
+    "sclgen": { "repo": "otfabric/go-iec61850", "kind": "embedded", "protocol": "IEC 61850", "summary": "Generate Go types from IEC 61850 SCL XSD schema bundles." },
+    "sclparse": { "repo": "otfabric/go-iec61850", "kind": "embedded", "protocol": "IEC 61850", "summary": "Detect, summarise and validate IEC 61850 SCL configuration files." },
+    "sparkplugbctl": { "repo": "otfabric/sparkplugbctl", "kind": "cli", "protocol": "Sparkplug B", "summary": "Sparkplug B 3.0 MQTT monitoring, publishing, Protobuf coding and edge/host simulation." },
+    "sunspecctl": { "repo": "otfabric/sunspecctl", "kind": "cli", "protocol": "SunSpec", "summary": "SunSpec Modbus for inverters, meters and batteries: discover, read, poll and simulate." }
+  },
+  "deferred": {
+    "modbusid": "otfabric/go-modbus-identity is private",
+    "docsync": "organisation tooling, not a protocol tool",
+    "modbus-simulator": "later phase",
+    "sunspec-explorer": "GUI application, later phase",
+    "sunspec-explorerd": "GUI application backend, later phase",
+    "modbus-trace-explorer": "GUI application, later phase",
+    "lan-tracker": "different release convention, later phase"
+  }
+}

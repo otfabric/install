@@ -409,8 +409,9 @@ main() {
   mkdir -p "$TMP/x"
   tar -xzf "$TMP/$ARCHIVE" -C "$TMP/x" "$MEMBER" 2>/dev/null ||
     fail extract "$ARCHIVE does not contain $MEMBER"
-  [ -f "$TMP/x/$MEMBER" ] && [ ! -L "$TMP/x/$MEMBER" ] ||
+  if [ ! -f "$TMP/x/$MEMBER" ] || [ -L "$TMP/x/$MEMBER" ]; then
     fail extract "$MEMBER in $ARCHIVE is not a regular file"
+  fi
   chmod 755 "$TMP/x/$MEMBER"
 
   # Smoke test before replacing anything.

@@ -278,8 +278,13 @@
       } finally { if ($zip) { $zip.Dispose() } }
 
       # Smoke test before replacing anything. Every OT Fabric CLI has `version`.
-      & $exe version *> $null
-      if ($LASTEXITCODE -ne 0) { Stop-Stage 'smoke' "$tool $version does not run on this system ($target)" }
+      # Windows PowerShell 5.1 turns native stderr into a terminating error under
+      # ErrorActionPreference=Stop, so relax it for this one call.
+      $rc = 1
+      $previousPreference = $ErrorActionPreference
+      $ErrorActionPreference = 'Continue'
+      try { & $exe version *> $null; $rc = $LASTEXITCODE } catch { $rc = 1 } finally { $ErrorActionPreference = $previousPreference }
+      if ($rc -ne 0) { Stop-Stage 'smoke' "$tool $version does not run on this system ($target)" }
 
       try {
         New-Item -ItemType Directory -Force -Path $dest | Out-Null

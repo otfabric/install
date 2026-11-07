@@ -64,7 +64,7 @@
   # Placeholder check without spelling the placeholder.
   function Test-Unfilled([string]$Value) { return $Value.StartsWith('@@') -and $Value.EndsWith('@@') }
 
-  $state = @{ Base = ''; Direct = $true; Tool = ''; Version = ''; Target = ''; Ua = ''; Id = ''; Requested = 'latest' }
+  $state = @{ ToolArg = $ToolArg; Base = ''; Direct = $true; Tool = ''; Version = ''; Target = ''; Ua = ''; Id = ''; Requested = 'latest' }
 
   # Our own errors carry an exit code and a stage in Exception.Data.
   function New-OtfError([string]$Message, [int]$Code, [string]$Stage) {
@@ -77,12 +77,12 @@
   function Stop-Usage([string]$Message) { throw (New-OtfError $Message 2 '') }
   function Stop-Stage([string]$Stage, [string]$Message) { throw (New-OtfError $Message 1 $Stage) }
 
-  function Get-Headers {
+  function Get-RequestHeader {
     return @{ 'X-OTF-Install' = $state.Id; 'X-OTF-Requested' = $state.Requested }
   }
 
   function Invoke-Fetch([string]$Url, [string]$OutFile) {
-    $params = @{ Uri = $Url; UserAgent = $state.Ua; Headers = (Get-Headers); UseBasicParsing = $true; TimeoutSec = 60 }
+    $params = @{ Uri = $Url; UserAgent = $state.Ua; Headers = (Get-RequestHeader); UseBasicParsing = $true; TimeoutSec = 60 }
     if ($OutFile) { $params.OutFile = $OutFile }
     $last = $null
     for ($i = 0; $i -lt 3; $i++) {
@@ -107,8 +107,10 @@
     $q = 'v={0}&t={1}&s={2}&stage={3}' -f [uri]::EscapeDataString($state.Version), $state.Target, $Status, $Stage
     try {
       Invoke-WebRequest -Uri ('{0}/r/{1}?{2}' -f $state.Base, $state.Tool, $q) -UserAgent $state.Ua `
-        -Headers (Get-Headers) -UseBasicParsing -TimeoutSec 2 | Out-Null
-    } catch { }
+        -Headers (Get-RequestHeader) -UseBasicParsing -TimeoutSec 2 | Out-Null
+    } catch {
+      $null = $_  # best effort: the outcome report never affects the install
+    }
   }
 
   function Get-Target {
@@ -163,7 +165,7 @@
   function Install-Tool {
     # Tool: served name, then the argument, then OTF_TOOL.
     $tool = $ServedTool
-    if (Test-Unfilled $tool) { $tool = $ToolArg }
+    if (Test-Unfilled $tool) { $tool = $state.ToolArg }
     if (-not $tool) { $tool = $env:OTF_TOOL }
     if (-not $tool) { Stop-Usage 'no tool given; set $env:OTF_TOOL (see https://get.otfabric.io/)' }
     if ($tool -cnotmatch '^[a-z0-9][a-z0-9-]*$') { Stop-Usage "invalid tool name: $tool" }
@@ -322,7 +324,9 @@
   $script:exitCode = 0
   try {
     [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
-  } catch { }
+  } catch {
+    $null = $_  # PowerShell 7 has no ServicePointManager setting to change
+  }
   try {
     Install-Tool
   } catch {

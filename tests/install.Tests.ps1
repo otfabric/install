@@ -66,7 +66,7 @@ BeforeAll {
     }
   }
 
-  function script:Get-Requests { return Get-Content $Log | Where-Object { $_ } | ForEach-Object { $_ | ConvertFrom-Json } }
+  function script:Get-RequestLog { return Get-Content $Log | Where-Object { $_ } | ForEach-Object { $_ | ConvertFrom-Json } }
 }
 
 AfterAll {
@@ -82,7 +82,7 @@ Describe 'install.ps1' {
     $out | Should -Match 'iex-returned'
     Test-Path (Join-Path $dir 'goodtool.exe') | Should -BeTrue
     & (Join-Path $dir 'goodtool.exe') version | Should -Match 'fakebin version'
-    $r = Get-Requests
+    $r = Get-RequestLog
     ($r | Where-Object { $_.path -eq '/goodtool/latest' }) | Should -Not -BeNullOrEmpty
     ($r | Where-Object { $_.path -like '/dl/goodtool/1.2.3/goodtool-1.2.3-windows-*.zip' }) | Should -Not -BeNullOrEmpty
     ($r | Where-Object { $_.path -eq '/r/goodtool' -and $_.query.s -eq 'ok' }) | Should -Not -BeNullOrEmpty
@@ -114,24 +114,24 @@ Describe 'install.ps1' {
     $dir = Join-Path $Work 'unmanaged'
     Invoke-Case 'goodtool' @{ OTF_UNMANAGED_INSTALL = $dir } | Should -Match 'Installed'
     [Environment]::GetEnvironmentVariable('Path', 'User') | Should -Be $before
-    (Get-Requests)[0].ua | Should -Match '; unmanaged; '
+    (Get-RequestLog)[0].ua | Should -Match '; unmanaged; '
   }
 
   It 'refuses a checksum mismatch and reports the stage' {
     $dir = Join-Path $Work 'bad'
     Invoke-Case 'badsum' @{ OTF_UNMANAGED_INSTALL = $dir } | Should -Match 'checksum mismatch'
     Test-Path (Join-Path $dir 'badsum.exe') | Should -BeFalse
-    (Get-Requests | Where-Object { $_.path -eq '/r/badsum' }).query.stage | Should -Be 'checksum'
+    (Get-RequestLog | Where-Object { $_.path -eq '/r/badsum' }).query.stage | Should -Be 'checksum'
   }
 
   It 'reports a missing checksums file as download' {
     Invoke-Case 'nosums' @{ OTF_UNMANAGED_INSTALL = (Join-Path $Work 'x') } | Should -Match 'no published checksums'
-    (Get-Requests | Where-Object { $_.path -eq '/r/nosums' }).query.stage | Should -Be 'download'
+    (Get-RequestLog | Where-Object { $_.path -eq '/r/nosums' }).query.stage | Should -Be 'download'
   }
 
   It 'reports a missing member as extract' {
     Invoke-Case 'nomember' @{ OTF_UNMANAGED_INSTALL = (Join-Path $Work 'x') } | Should -Match 'does not contain'
-    (Get-Requests | Where-Object { $_.path -eq '/r/nomember' }).query.stage | Should -Be 'extract'
+    (Get-RequestLog | Where-Object { $_.path -eq '/r/nomember' }).query.stage | Should -Be 'extract'
   }
 
   It 'keeps the previous binary when the new one does not run' {
@@ -140,7 +140,7 @@ Describe 'install.ps1' {
     Set-Content -Path (Join-Path $dir 'broken.exe') -Value 'previous'
     Invoke-Case 'broken' @{ OTF_UNMANAGED_INSTALL = $dir } | Should -Match 'does not run'
     Get-Content (Join-Path $dir 'broken.exe') | Should -Be 'previous'
-    (Get-Requests | Where-Object { $_.path -eq '/r/broken' }).query.stage | Should -Be 'smoke'
+    (Get-RequestLog | Where-Object { $_.path -eq '/r/broken' }).query.stage | Should -Be 'smoke'
   }
 
   It 'exits 0 / 1 / 2 when run as a file' {
@@ -154,7 +154,7 @@ Describe 'install.ps1' {
     Invoke-Case 'goodtool' @{ OTF_INSTALL_DIR = 'C:\a'; OTF_UNMANAGED_INSTALL = 'C:\b' } | Should -Match 'not both'
     Invoke-Case 'goodtool' @{ OTF_TARGET = 'linux-amd64' } | Should -Match 'invalid OTF_TARGET'
     Invoke-Case 'goodtool' @{ OTF_BASE_URL = 'http://example.com' } | Should -Match 'must be https'
-    (Get-Requests) | Should -BeNullOrEmpty
+    (Get-RequestLog) | Should -BeNullOrEmpty
   }
 
   It 'direct mode rejects an unknown tool' {

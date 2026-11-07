@@ -42,6 +42,7 @@ report.
 | `tools.json` | `make registry`, then `make check` |
 | `install.ps1` | CI (`windows` job); Pester needs Windows |
 | the tool list against the organisation | `make org-scan` (needs `gh`) |
+| a release, or to check the live service | `make all-tools` (this platform); workflow **All tools** (every platform) |
 
 ## Definition of Done
 

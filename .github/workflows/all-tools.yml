@@ -1,0 +1,117 @@
+name: All tools
+
+# Installs every tool in get.otfabric.io/tools.json on every supported
+# platform through the live service, and runs it. Catches releases with a
+# missing archive, a bad checksums file or a binary that does not start.
+
+on:
+  schedule:
+    - cron: '41 4 * * 2'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: all-tools
+  cancel-in-progress: false
+
+jobs:
+  unix:
+    name: ${{ matrix.target }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-latest, target: linux-amd64 }
+          - { os: ubuntu-24.04-arm, target: linux-arm64 }
+          - { os: macos-latest, target: darwin-arm64 }
+          - { os: macos-15-intel, target: darwin-amd64 }
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Install every tool
+        run: sh tests/all_tools.sh results-${{ matrix.target }}.txt
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: results-${{ matrix.target }}
+          path: results-${{ matrix.target }}.txt
+
+  armv7:
+    name: linux-armv7
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: docker/setup-qemu-action@v4
+      - name: Install every tool (Raspberry Pi OS style userland)
+        run: |
+          docker run --rm --platform linux/arm/v7 -v "$PWD:/src" -w /src arm32v7/debian:stable-slim \
+            sh -c 'apt-get -qq update && apt-get -qq install -y curl ca-certificates python3 >/dev/null && sh tests/all_tools.sh results-linux-armv7.txt'
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: results-linux-armv7
+          path: results-linux-armv7.txt
+
+  windows:
+    name: ${{ matrix.target }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: windows-latest, target: windows-amd64 }
+          - { os: windows-11-arm, target: windows-arm64 }
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Install every tool
+        shell: pwsh
+        run: ./tests/all_tools.ps1 -Out results-${{ matrix.target }}.txt
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: results-${{ matrix.target }}
+          path: results-${{ matrix.target }}.txt
+
+  summary:
+    name: Tool × platform
+    needs: [unix, armv7, windows]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: results-*
+          merge-multiple: true
+      - name: Table
+        run: |
+          python3 -I - <<'EOF' >>"$GITHUB_STEP_SUMMARY"
+          import glob, os
+          targets = ["linux-amd64", "linux-arm64", "linux-armv7", "darwin-amd64", "darwin-arm64", "windows-amd64", "windows-arm64"]
+          res, tools = {}, set()
+          for t in targets:
+              p = f"results-{t}.txt"
+              if not os.path.exists(p):
+                  continue
+              for line in open(p, encoding="utf-8-sig"):
+                  parts = line.split(None, 2)
+                  if len(parts) >= 2:
+                      tools.add(parts[0]); res[(parts[0], t)] = parts[1]
+          print("| Tool | " + " | ".join(targets) + " |")
+          print("|---|" + "---|" * len(targets))
+          mark = {"ok": "✅", "fail": "❌"}
+          for tool in sorted(tools):
+              print(f"| `{tool}` | " + " | ".join(mark.get(res.get((tool, t)), "–") for t in targets) + " |")
+          EOF
+          cat "$GITHUB_STEP_SUMMARY"

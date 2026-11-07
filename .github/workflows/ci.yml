@@ -29,12 +29,12 @@ jobs:
       - name: Registry in sync with tools.json
         run: python3 -I scripts/registry.py --check
       - name: shellcheck
-        run: shellcheck -s sh install.sh tests/run.sh
+        run: shellcheck -s sh install.sh tests/run.sh tests/all_tools.sh
       - name: PSScriptAnalyzer
         shell: pwsh
         run: |
           Install-PSResource PSScriptAnalyzer -TrustRepository -Quiet
-          $r = foreach ($f in './install.ps1', './tests/install.Tests.ps1') {
+          $r = foreach ($f in './install.ps1', './tests/install.Tests.ps1', './tests/all_tools.ps1') {
             Invoke-ScriptAnalyzer -Path $f -Severity Warning, Error `
               -ExcludeRule PSAvoidUsingWriteHost, PSUseShouldProcessForStateChangingFunctions
           }

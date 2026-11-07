@@ -34,8 +34,10 @@ jobs:
         shell: pwsh
         run: |
           Install-PSResource PSScriptAnalyzer -TrustRepository -Quiet
-          $r = Invoke-ScriptAnalyzer -Path ./install.ps1, ./tests/install.Tests.ps1 -Severity Warning, Error `
-            -ExcludeRule PSAvoidUsingWriteHost, PSUseShouldProcessForStateChangingFunctions
+          $r = foreach ($f in './install.ps1', './tests/install.Tests.ps1') {
+            Invoke-ScriptAnalyzer -Path $f -Severity Warning, Error `
+              -ExcludeRule PSAvoidUsingWriteHost, PSUseShouldProcessForStateChangingFunctions
+          }
           $r | Format-Table -AutoSize | Out-String -Width 200
           if ($r) { exit 1 }
 

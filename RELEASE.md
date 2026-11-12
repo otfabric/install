@@ -1,5 +1,14 @@
 # Release notes
 
+## v0.1.2
+
+**Date:** 2026-11-12
+**Previous release:** v0.1.1
+
+- New tool: `mmstracectl` (IEC 61850 capture analysis), from otfabric/go-mms-trace.
+
+---
+
 ## v0.1.1
 
 **Date:** 2026-11-12

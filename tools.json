@@ -15,6 +15,7 @@
     "ieee20305ctl": { "repo": "otfabric/ieee20305ctl", "kind": "cli", "protocol": "IEEE 2030.5", "summary": "IEEE 2030.5 (SEP 2.0) DER testing: discovery, registration, certificates and validation." },
     "knxctl": { "repo": "otfabric/knxctl", "kind": "cli", "protocol": "KNX", "summary": "KNXnet/IP discovery, tunnelling, routing, group monitoring, DPT coding and simulation." },
     "mbcapctl": { "repo": "otfabric/go-modbus-capture", "kind": "embedded", "protocol": "Modbus", "summary": "Inspect, convert and validate Modbus capture files (.mbcap)." },
+    "mmstracectl": { "repo": "otfabric/go-mms-trace", "kind": "embedded", "protocol": "IEC 61850", "summary": "Analyse IEC 61850 captures (pcap, pcapng): MMS associations and services, reports, GOOSE and Sampled Values." },
     "mbtracectl": { "repo": "otfabric/go-modbus-trace", "kind": "embedded", "protocol": "Modbus", "summary": "Analyse Modbus/TCP traffic in pcap/pcapng traces and export MBCAP." },
     "modbus-cli": { "repo": "otfabric/go-modbus", "kind": "embedded", "protocol": "Modbus", "summary": "Minimal Modbus TCP/RTU client for quick probing and troubleshooting." },
     "modbusctl": { "repo": "otfabric/modbusctl", "kind": "cli", "protocol": "Modbus", "summary": "Modbus TCP discovery, register scanning, fingerprinting, SunSpec, recording, replay and simulation." },

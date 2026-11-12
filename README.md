@@ -96,6 +96,7 @@ The checksums file comes from the same GitHub release as the archive: it proves 
 | `knxctl` | cli | KNX | [otfabric/knxctl](https://github.com/otfabric/knxctl) | KNXnet/IP discovery, tunnelling, routing, group monitoring, DPT coding and simulation. |
 | `mbcapctl` | embedded | Modbus | [otfabric/go-modbus-capture](https://github.com/otfabric/go-modbus-capture) | Inspect, convert and validate Modbus capture files (.mbcap). |
 | `mbtracectl` | embedded | Modbus | [otfabric/go-modbus-trace](https://github.com/otfabric/go-modbus-trace) | Analyse Modbus/TCP traffic in pcap/pcapng traces and export MBCAP. |
+| `mmstracectl` | embedded | IEC 61850 | [otfabric/go-mms-trace](https://github.com/otfabric/go-mms-trace) | Analyse IEC 61850 captures (pcap, pcapng): MMS associations and services, reports, GOOSE and Sampled Values. |
 | `modbus-cli` | embedded | Modbus | [otfabric/go-modbus](https://github.com/otfabric/go-modbus) | Minimal Modbus TCP/RTU client for quick probing and troubleshooting. |
 | `modbusctl` | cli | Modbus | [otfabric/modbusctl](https://github.com/otfabric/modbusctl) | Modbus TCP discovery, register scanning, fingerprinting, SunSpec, recording, replay and simulation. |
 | `nsdctl` | embedded | IEC 61850 | [otfabric/go-iec61850-model](https://github.com/otfabric/go-iec61850-model) | Inspect and validate IEC 61850 namespace definitions (NSD, IEC 61850-7-7). |

@@ -46,6 +46,7 @@
     'knxctl' = 'otfabric/knxctl'
     'mbcapctl' = 'otfabric/go-modbus-capture'
     'mbtracectl' = 'otfabric/go-modbus-trace'
+    'mmstracectl' = 'otfabric/go-mms-trace'
     'modbus-cli' = 'otfabric/go-modbus'
     'modbusctl' = 'otfabric/modbusctl'
     'nsdctl' = 'otfabric/go-iec61850-model'

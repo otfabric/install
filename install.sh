@@ -42,6 +42,7 @@ otf_repo_for() {
     knxctl) echo otfabric/knxctl ;;
     mbcapctl) echo otfabric/go-modbus-capture ;;
     mbtracectl) echo otfabric/go-modbus-trace ;;
+    mmstracectl) echo otfabric/go-mms-trace ;;
     modbus-cli) echo otfabric/go-modbus ;;
     modbusctl) echo otfabric/modbusctl ;;
     nsdctl) echo otfabric/go-iec61850-model ;;

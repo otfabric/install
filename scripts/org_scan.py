@@ -3,7 +3,12 @@
 
 Lists every public repository's workflows that call the shared
 go-binary-release workflow, reads their `binary-name:` inputs, and fails when
-a binary is neither registered under "tools" nor listed under "deferred".
+a binary is neither registered under "tools" nor listed under "deferred". A
+repository with a release workflow of its own (several tools from one
+repository, as otfabric/iec60870ctl) declares what it releases with a comment
+line `# binary-names: tool1 tool2 ...` in that workflow. A binary may be
+released by more than one repository (one that moved, while the old repository
+still exists); it is fine when one of them is the registered one.
 Needs the GitHub CLI (`gh`) with any token.
 """
 
@@ -47,20 +52,23 @@ def main():
                 continue
             content = gh(f"repos/{ORG}/{repo}/contents/{f['path']}")
             text = base64.b64decode(content["content"]).decode("utf-8", "replace")
-            if "go-binary-release.yml" not in text:
-                continue
-            for name in re.findall(r"^\s*binary-name:\s*['\"]?([A-Za-z0-9_-]+)", text, re.M):
-                found.setdefault(name, f"{ORG}/{repo}")
+            names = []
+            if "go-binary-release.yml" in text:
+                names += re.findall(r"^\s*binary-name:\s*['\"]?([A-Za-z0-9_-]+)", text, re.M)
+            for line in re.findall(r"^#\s*binary-names:\s*(.+)$", text, re.M):
+                names += re.findall(r"[A-Za-z0-9_-]+", line)
+            for name in names:
+                found.setdefault(name, set()).add(f"{ORG}/{repo}")
 
     missing = sorted(n for n in found if n not in known)
-    moved = sorted(n for n in found if n in registered_repo and registered_repo[n] != found[n])
+    moved = sorted(n for n in found if n in registered_repo and registered_repo[n] not in found[n])
     for n in sorted(found):
-        print(f"{n:24} {found[n]}{'  (MISSING)' if n in missing else ''}")
+        print(f"{n:24} {', '.join(sorted(found[n]))}{'  (MISSING)' if n in missing else ''}")
     problems = []
     if missing:
         problems.append("not in tools.json (register or defer): " + ", ".join(missing))
     if moved:
-        problems.append("registered under another repository: " + ", ".join(f"{n} -> {found[n]}" for n in moved))
+        problems.append("registered under another repository: " + ", ".join(f"{n} -> {', '.join(sorted(found[n]))}" for n in moved))
     gone = sorted(n for n in registered_repo if n not in found)
     if gone:
         problems.append("registered but no longer released by any repository: " + ", ".join(gone))

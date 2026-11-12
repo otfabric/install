@@ -87,7 +87,10 @@ The checksums file comes from the same GitHub release as the archive: it proves 
 | `canopenctl` | cli | CANopen | [otfabric/canopenctl](https://github.com/otfabric/canopenctl) | CANopen (CiA 301/402) discovery, SDO/PDO, NMT, EMCY, EDS and device simulation. |
 | `dnp3ctl` | cli | DNP3 | [otfabric/dnp3ctl](https://github.com/otfabric/dnp3ctl) | DNP3 (IEEE 1815) polling, control, discovery, file transfer and a simulated outstation. |
 | `ethernetipctl` | cli | EtherNet/IP | [otfabric/ethernetipctl](https://github.com/otfabric/ethernetipctl) | EtherNet/IP (CIP) discovery, attributes, cyclic I/O, Logix tags, EDS and adapter simulation. |
-| `iec104ctl` | cli | IEC 60870-5-104 | [otfabric/iec104ctl](https://github.com/otfabric/iec104ctl) | IEC 104 SCADA and RTU testing, monitoring, commands and diagnostics. |
+| `iec101ctl` | cli | IEC 60870-5-101 | [otfabric/iec60870ctl](https://github.com/otfabric/iec60870ctl) | IEC 101 over serial or a terminal server: interrogate, monitor, command, unbalanced or balanced, and simulate a station. |
+| `iec102ctl` | cli | IEC 60870-5-102 | [otfabric/iec60870ctl](https://github.com/otfabric/iec60870ctl) | IEC 102 meters: integrated totals, events, clock and the REE profile, and a simulated meter. |
+| `iec103ctl` | cli | IEC 60870-5-103 | [otfabric/iec60870ctl](https://github.com/otfabric/iec60870ctl) | IEC 103 protection equipment: interrogation, commands, generic services, disturbance data and simulation. |
+| `iec104ctl` | cli | IEC 60870-5-104 | [otfabric/iec60870ctl](https://github.com/otfabric/iec60870ctl) | IEC 104 SCADA and RTU testing, monitoring, commands and diagnostics. |
 | `iec61850ctl` | cli | IEC 61850 | [otfabric/iec61850ctl](https://github.com/otfabric/iec61850ctl) | IEC 61850 MMS, GOOSE and Sampled Values: discover IEDs, browse, control, reports and SCL. |
 | `ieee20305ctl` | cli | IEEE 2030.5 | [otfabric/ieee20305ctl](https://github.com/otfabric/ieee20305ctl) | IEEE 2030.5 (SEP 2.0) DER testing: discovery, registration, certificates and validation. |
 | `knxctl` | cli | KNX | [otfabric/knxctl](https://github.com/otfabric/knxctl) | KNXnet/IP discovery, tunnelling, routing, group monitoring, DPT coding and simulation. |

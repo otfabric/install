@@ -33,7 +33,10 @@ otf_repo_for() {
     canopenctl) echo otfabric/canopenctl ;;
     dnp3ctl) echo otfabric/dnp3ctl ;;
     ethernetipctl) echo otfabric/ethernetipctl ;;
-    iec104ctl) echo otfabric/iec104ctl ;;
+    iec101ctl) echo otfabric/iec60870ctl ;;
+    iec102ctl) echo otfabric/iec60870ctl ;;
+    iec103ctl) echo otfabric/iec60870ctl ;;
+    iec104ctl) echo otfabric/iec60870ctl ;;
     iec61850ctl) echo otfabric/iec61850ctl ;;
     ieee20305ctl) echo otfabric/ieee20305ctl ;;
     knxctl) echo otfabric/knxctl ;;
